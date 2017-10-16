@@ -86,26 +86,43 @@ function get_all_circuits()
  * @return array
  * */
 function get_all_distinct_planned_circuits()
-{		
-		global $list_of_circuits;
-		global $list_of_programmations;
-		$found=[];
-		
-		foreach ($list_of_circuits as $circuit){
-			foreach ($list_of_programmations as $programmation){
-				
-				if ($programmation->getCircuit()->getId() == $circuit->getId()){
-					
-					//foreach ($found as $foundelement){
-						//if ($programmation->getCircuit()->getId() == $foundelement->getId()){
-							//break;
-						
-						$found[]=$circuit;
-					//}
-				}
-			}
-		}
-		return $found;
+{
+    global $list_of_circuits;
+    global $list_of_programmations;
+    $found = [];
+
+    foreach ($list_of_circuits as $circuit) {
+        foreach ($list_of_programmations as $programmation) {
+
+            if ($programmation->getCircuit()->getId() == $circuit->getId()) {
+
+
+                    $found[] = $circuit;
+                }
+
+
+            }
+        }
+    $found2=[];
+    $thisisaboolean=false;
+    foreach ($found as $foundelement){
+        foreach ($found2 as $found2element){
+            if($found2element->getId()==$foundelement->getId()) {
+                $thisisaboolean=true;
+            }
+
+        }
+        if($thisisaboolean){
+            $thisisaboolean=false;
+        }
+        else{
+        $found2[]=$foundelement;}
+
+
+    }
+
+    return $found2;
+
 }
 		
 		
