@@ -1,20 +1,20 @@
 {# templates/circuitslist.html.twig #}
 
-{#BACK OFFICE NON ROUTE POUR LE MOMENT#}
 
-{% extends "FrontOffice/baselayoutfront.html.twig" %}
+
+{% extends "BackOffice/baselayoutBack.html.twig" %}
 
 {% block title %}{{ parent() }} - Circuits list{% endblock %}
 
 {% block body %}
     <h1>List of circuits</h1>
-    {% if plannedcircuitslist is not empty %}
+    {% if circuitslist is not empty %}
         <p>Here are all your circuits:</p>
         <ul>
         {# Loop through list and creeate the list of circuit items. #}
         
        
-        {% for circuit in plannedcircuitslist %}
+        {% for circuit in circuitslist %}
         	
               		
             <li>

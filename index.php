@@ -36,7 +36,7 @@ $app->get('/',
 }
 );
 
-// circuitlist : Liste tous les circuits
+// circuitlist : Liste tous les circuits planifiés, pour le frontoffice
 $app->get ( '/circuit', 
     function () use ($app) 
     {
@@ -49,7 +49,23 @@ $app->get ( '/circuit',
     			'circuitslist' => $circuitslist, 'programmationslist'=>$programmations, 'plannedcircuitslist'=>$plannedcircuitslist
     	] );
     }
+)->bind ( 'circuitlistadmin' );
+
+// circuitlist : Liste tous les circuits, pour le back office
+$app->get ( '/admin/circuit',
+    function () use ($app)
+    {
+        $circuitslist = get_all_circuits ();
+        $programmations= get_all_programmations();
+        //print_r($circuitslist);
+
+        return $app ['twig']->render ( 'BackOffice/circuitslistB.html.twig', [
+            'circuitslist' => $circuitslist, 'programmationslist'=>$programmations,
+        ] );
+    }
 )->bind ( 'circuitlist' );
+
+//
 
 // circuitshow : affiche les détails d'un circuit
 $app->get ( '/circuit/{id}', 
@@ -67,6 +83,25 @@ $app->get ( '/circuit/{id}',
 			] );
 	}
 )->bind ( 'circuitshow' );
+
+
+
+// circuitshow : affiche les détails d'un circuit, pour le Back Office
+$app->get ( '/admin/circuit/{id}',
+    function ($id) use ($app)
+    {
+        $etapes= get_all_etapes_by_circuit_id($id);
+        $circuit = get_circuit_by_id ( $id );
+        //print_r($etapes);
+
+
+        return $app ['twig']->render ( 'BackOffice/circuitsshowB.html.twig', [
+            'id' => $id,
+            'circuit' => $circuit ,
+            'etapes' => $etapes,
+        ] );
+    }
+)->bind ( 'circuitshowadmin' );
 
 // programmationlist : liste tous les circuits programmés
 $app->get ( '/programmation', 
