@@ -97,22 +97,25 @@ function get_all_distinct_planned_circuits()
 
             if ($programmation->getCircuit()->getId() == $circuit->getId()) {
 
-
+                    //on obtient dans found tous les circuits ayant une progrqmmation (avec des doublons éventuels)
                     $found[] = $circuit;
                 }
 
 
             }
         }
+    //suppression des doublons éventuels 
     $found2=[];
     $thisisaboolean=false;
     foreach ($found as $foundelement){
         foreach ($found2 as $found2element){
             if($found2element->getId()==$foundelement->getId()) {
+                //si le circuit qu'on considère est déjà dans found, on passe le booléen à true
                 $thisisaboolean=true;
             }
 
         }
+        //si le booléen est à true, on ne fait rien; si il est à false, on le rajoute dans la liste
         if($thisisaboolean){
             $thisisaboolean=false;
         }
