@@ -67,7 +67,7 @@ $app->get ( '/admin/circuit',
 
 //
 
-// circuitshow : affiche les détails d'un circuit
+// circuitshow : affiche les détails d'un circuit, pour le front office
 $app->get ( '/circuit/{id}', 
 	function ($id) use ($app) 
 	{	
@@ -115,5 +115,18 @@ $app->get ( '/programmation',
 			] );
 	}
 )->bind ( 'programmationlist' );
+
+// programmationlist : liste tous les circuits programmés, pour le BackOffice
+$app->get ( '/admin/programmation',
+		function () use ($app)
+		{
+			$programmationslist = get_all_programmations ();
+			// print_r($programmationslist);
+			
+			return $app ['twig']->render ( 'BackOffice/programmationslistB.html.twig', [
+					'programmationslist' => $programmationslist
+			] );
+}
+)->bind ( 'programmationlistadmin' );
 
 $app->run ();
