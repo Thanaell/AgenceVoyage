@@ -27,7 +27,7 @@ $app['twig'] = $app->extend('twig', function ($twig, $app) {
 
 // Ajout de la fonction 'path' dans les templates Twig
 $app['twig'] = $app->extend('twig', function ($twig, $app) {
-    $twig->addFunction(new \Twig_SimpleFunction('path', function ($url) use ($app) {
+    $twig->addFunction(new \Twig_SimpleFunction('path', function (...$url) use ($app) {
         return call_user_func_array(array(
             $app['url_generator'],
             'generate'
