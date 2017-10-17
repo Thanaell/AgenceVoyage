@@ -104,7 +104,7 @@ function get_all_distinct_planned_circuits()
 
             }
         }
-    //suppression des doublons éventuels 
+    //suppression des doublons éventuels
     $found2=[];
     $thisisaboolean=false;
     foreach ($found as $foundelement){

@@ -20,6 +20,16 @@ $app->register ( new Silex\Provider\TwigServiceProvider (), array (
     )
 ) );
 
+
+$app->register(new Silex\Provider\AssetServiceProvider(), array(
+    'assets.version' => 'v1',
+    'assets.version_format' => '%s?version=%s',
+    'assets.named_packages' => array(
+        'css' => array('version' => 'css2', 'base_path' => '/whatever-makes-sense'),
+        'images' => array('base_urls' => array('https://img.example.com')),
+    ),
+));
+
 $app['twig'] = $app->extend('twig', function ($twig, $app) {
     $twig->addExtension(new \Twig_Extension_Debug());
     return $twig;
