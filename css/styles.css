@@ -1,5 +1,24 @@
 html, body {
     font-family: sans-serif;
+    background-image:url(/images/css_background_002.jpg);
+}
+
+p{
+    color:black;
+    font-size: 1.25em;
+}
+
+a{
+    color:black;
+}
+
+
+a:visited{
+    color:black;
+}
+
+a:hover{
+    color: #ff6e06;
 }
 
 h1 {
@@ -26,11 +45,19 @@ li {
 }
 
 .container {
+    margin: 100px;
     max-width: 800px;
-    background-color: #ffefb4;
+    background: transparent;
+
 }
 
 .col-md-12{
-    background-color: red;
+    background: transparent;
+
+}
+
+.row{
+    margin: 30px;
+    background: transparent;
 }
 
