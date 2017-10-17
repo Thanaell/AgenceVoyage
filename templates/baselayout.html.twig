@@ -22,7 +22,28 @@
   </head>
   <body>
     {% block body %}
+    {# Bootstrap container #}
+    <div style="min-height: 90%" class="container">
 
+        {% block header %}
+            <div class="row">
+                <div class="col-md-12">
+                    <p><i>HEADER</i></p>
+                </div>
+            </div>
+        {% endblock %}
+        {% block main %}
+            <div class="row">
+                <div class="col-md-12">
+                    <p><i>MAIN</i></p>
+                </div>
+            </div>
+        {% endblock %}
+        {% block footer %}
+            <footer id="a">
+                <p>FOOTER</p>
+            </footer>
+         {% endblock %}
     {% endblock %} {# body #}
   </body>
 </html>
