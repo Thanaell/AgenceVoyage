@@ -25,6 +25,15 @@ h1 {
     margin-top: 40px;
     margin-bottom: 20px;
     font-weight: 400;
+    font-size:1.25em;
+}
+
+h2 {
+    margin-top: 5px;
+    margin-bottom: 20px;
+    font-weight: 500;
+    font-size:1.75em;
+    color:black;
 }
 
 ul {
@@ -61,3 +70,19 @@ li {
     background: transparent;
 }
 
+.nav-item{
+    padding: 10px ;
+    margin-top: 5px;
+}
+
+.nav-link{
+    padding: 10px;
+}
+
+
+
+#img_header{
+
+    max-height: 200px;
+    width:100%;
+}
