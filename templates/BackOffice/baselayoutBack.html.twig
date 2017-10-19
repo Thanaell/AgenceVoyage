@@ -16,6 +16,31 @@
 {% block header %}
 
     <h1>Agence de Voyage, partie administrateur</h1>
+    {% block nav %}
+
+        <nav class="navbar">
+            <div class="row">
+
+                <ul class="navbar-nav mr-auto">
+
+                    <li class="nav-item">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Modifier des circuits</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Modifier des programmations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('accueil')}}">Déconnexion</a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </nav>
+    {% endblock %}
 {% endblock %}
 
 {% block footer %}
