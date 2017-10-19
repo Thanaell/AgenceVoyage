@@ -11,47 +11,49 @@
 
 
 {% block title %}Details for circuit {{ id }}{% endblock %}
-{% block body %}
 
-  <h1>{{ circuit.description }}</h1>
+{% block main %}
 
-	<h2>Détails</h2>
+	<div class="circuit">
 
-			<p>Description: {{ circuit.description }}</p>
+		<h2>{{ circuit.description }} ~ Globe Trottineur</h2>
 
-			<p>Départ de {{ circuit.villeDepart }} pour {{ circuit.dureeCircuit }} j.
-         de voyage à travers le {{ circuit.paysDepart }}, pour terminer à
-         {{ circuit.villeArrivee }}.</p>
-         
-         <p> Etapes du circuit  </p>
-        
-      {% for etape in etapes %}
-         	 <li> {{ etape.villeEtape}} </li>
-         {% endfor %}                      
-         	
+		<div id="presentation">
+			<h3>Détails</h3>
 
-  {% if circuit.programmations is not empty %}
-  <h2>Programmations de ce circuit</h2>
-  {# <pre>{{ dump(circuit) }}</pre> #}
-     	<table>
-     	 		<thead>
-     					<tr>
-     				    	<th>Date de départ</th>
-     						  <th>Nombre de personnes</th>
-     						  <th>Prix</th>
-     					</tr>
-     				</thead>
-     		{%  for programmation in circuit.programmations %}
-     			<tr>
-     			   <td>{{ programmation.dateDepart|date('d-m-Y')  }}</td>
-     			   <td>{{ programmation.nombrePersonnes }}</td>
-     			   <td>{{ programmation.prix }} euros</td>
-     			</tr>
-     		{% endfor %}
-     		</table>
-    {% else %}
-    <p>Désolé : pas encore de programmations pour ce circuit.</p>
-    {% endif %}
+			<p>Voyage en {{ circuit.description }} :</p>
+			<p>En partant de la belle ville de {{ circuit.villeDepart }}, nous vous proposons un voyage en {{ circuit.paysDepart }} pour une durée de {{ circuit.dureeCircuit }} jours, aboutissant à {{ circuit.villeArrivee }}.</p>
 
-{% endblock %}
+		</div>
 
+		<div id="circuit_details">
+			<h3>Étapes</h3>
+
+			<div class="cellule_titre">Étape n°</div>
+			<div class="cellule_titre">Ville visitée</div>
+			<div class="cellule_titre">Temps de la visite</div>
+            {%  for etape in circuit.etapes %}
+				<div class="cellule">{{ etape.numeroEtape }}</div>
+				<div class="cellule">{{ etape.villeEtape }}</div>
+				<div class="cellule">{{ etape.nombreJours }} journée(s)</div>
+            {% endfor %}{# circuit.etapes #}
+		</div> {# circuit_details #}
+
+		<div id="infosPratiques">
+			<h3>Programmations de ce circuit</h3>
+
+			<div class="cellule_titre">Date de départ</div>
+			<div class="cellule_titre">Nombre de personnes</div>
+			<div class="cellule_titre">Prix du voyage</div>
+            {%  for programmation in circuit.programmations %}
+				<div class="cellule">Le {{ programmation.dateDepart|date('d/m/Y')  }}</div>
+				<div class="cellule">{{ programmation.nombrePersonnes }}</div>
+				<div class="cellule">{{ programmation.prix }} €</div>
+            {% endfor %}
+		</div> {# infosPratiques #}
+
+
+
+	</div> {# circuit #}
+
+{% endblock %}  {# main #}

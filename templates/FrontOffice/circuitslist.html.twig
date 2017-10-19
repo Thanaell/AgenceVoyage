@@ -4,7 +4,7 @@
 
 {% block title %}{{ parent() }} - Circuits list{% endblock %}
 
-{% block body %}
+{% block main %}
     <h1>List of circuits</h1>
     {% if plannedcircuitslist is not empty %}
 <div class="row">
@@ -31,4 +31,4 @@
         <p>Sorry, you don't have any circuits yet!</p>
     {% endif %}
 
-{% endblock %} {# body #}
+{% endblock %} {# main #}

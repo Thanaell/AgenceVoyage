@@ -9,5 +9,45 @@
      <link rel="stylesheet" href="{{ asset('vendor/twbs/bootstrap/dist/css/bootstrap-theme.min.css') }}">
      {# <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/darkly/bootstrap.min.css" rel="stylesheet"> #}
      <link href="{{ asset('css/frontstyles.css') }}" rel="stylesheet">
+     <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
      {% block custompage_style %}<style></style>{% endblock %}
  {% endblock %} {# stylesheets #}
+
+
+{% block header %}
+    <header>
+
+        <img id="img_header" src="https://t3.ftcdn.net/jpg/01/09/81/02/240_F_109810224_B2Jmt5FCLjcySrE7K1VwgOnIxPQ6XHQZ.jpg" alt="banner">
+        {% block nav %}
+
+            <nav class="navbar">
+                <div class="row">
+
+                    <ul class="navbar-nav mr-auto">
+
+                        <li class="nav-item">
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contactez-nous</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#">Accès administrateur</a>
+                        </li>
+                    </ul>
+
+                </div>
+
+            </nav>
+        {% endblock %}
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
+{% block footer %}
+<p>N'hésitez pas à nous contacter et à nous rejoindre sur les réseaux sociaux pour ne rater aucun de nos nouveaux voyages</p>
+{% endblock %}
+

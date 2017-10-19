@@ -34,7 +34,14 @@ $app->get('/',
 		{
 			return $app ['twig']->render('accueil.html.twig');
 }
-);
+)->bind ('accueil');
+
+$app->get('/admin',
+    function () use ($app)
+    {
+        return $app ['twig']->render('BackOffice/accueilB.html.twig');
+    }
+)->bind ('accueiladmin');
 
 // circuitlist : Liste tous les circuits planifiés, pour le frontoffice
 $app->get ( '/circuit', 

@@ -6,7 +6,7 @@
 
 {% block title %}{{ parent() }} - Circuits list{% endblock %}
 
-{% block body %}
+{% block main %}
     <h1>List of circuits</h1>
     {% if circuitslist is not empty %}
         <p>Here are all your circuits:</p>
@@ -18,7 +18,7 @@
         	
               		
             <li>
-          		<a href="{{ path('circuitshow', { 'id' : circuit.id }) }}">{{ circuit.description }}</a>
+          		<a href="{{ path('circuitshowadmin', { 'id' : circuit.id }) }}">{{ circuit.description }}</a>
             </li>
             	
         {% endfor %}
