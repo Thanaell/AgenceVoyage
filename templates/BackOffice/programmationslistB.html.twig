@@ -1,0 +1,37 @@
+{# templates/programmationslist.html.twig #}
+
+{% extends "BackOffice/baselayoutBack.html.twig" %}
+
+{% block title %}{{ parent() }} - programmations list{% endblock %}
+
+{% block main %}
+
+
+
+<div class="container">
+    <div class="row">
+        <div>{{ block('sidenav') }}</div>
+        <div class="col-lg-3"></div>
+
+        <div class="col-lg-7">
+
+
+    <h1>List of programmations</h1>
+    {% if programmationslist is not empty %}
+        <p>Here are all your programmations:</p>
+        <ul>
+            {# Loop through list and creeate the list of programmation items. #}
+            {% for programmation in programmationslist %}
+                <li>
+                    {{ programmation.id }} {{ programmation.circuit.description }} le {{ programmation.dateDepart|date('d-m-Y')  }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Sorry, you don't have any programmations yet!</p>
+    {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %} {# body #}

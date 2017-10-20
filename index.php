@@ -43,8 +43,24 @@ $app->get('/admin',
     }
 )->bind ('accueiladmin');
 
+$app->get('/admin/modifcircuit',
+    function () use ($app)
+    {
+        return $app ['twig']->render('BackOffice/modifcircuit.html.twig');
+    }
+)->bind ('modifcircuit');
+
+
+$app->get('/admin/modifprogrammation',
+    function () use ($app)
+    {
+        return $app ['twig']->render('BackOffice/modifprogrammation.html.twig');
+    }
+)->bind ('modifprogrammation');
+
+
 // circuitlist : Liste tous les circuits planifiés, pour le frontoffice
-$app->get ( '/circuit', 
+$app->get ( '/circuit',
     function () use ($app) 
     {
     	$circuitslist = get_all_circuits ();
@@ -56,7 +72,7 @@ $app->get ( '/circuit',
     			'circuitslist' => $circuitslist, 'programmationslist'=>$programmations, 'plannedcircuitslist'=>$plannedcircuitslist
     	] );
     }
-)->bind ( 'circuitlistadmin' );
+)->bind ( 'circuitlist' );
 
 // circuitlist : Liste tous les circuits, pour le back office
 $app->get ( '/admin/circuit',
@@ -70,7 +86,7 @@ $app->get ( '/admin/circuit',
             'circuitslist' => $circuitslist, 'programmationslist'=>$programmations,
         ] );
     }
-)->bind ( 'circuitlist' );
+)->bind ( 'circuitlistadmin' );
 
 //
 

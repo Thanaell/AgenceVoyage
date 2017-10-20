@@ -2,8 +2,9 @@
 
 {% extends "BackOffice/baselayoutBack.html.twig" %}
 
-{% block title %}Accueil administrateur {% endblock %}
-
+{% block title %}
+Accueil administrateur
+{% endblock %}
 
 {% block main %}
 
@@ -11,16 +12,29 @@
 
 
 
+
+
+
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
-                <p> <a href="/admin/circuit"> Tous les circuits </a> </p>
-            </div>
-        </div>
+            <div>{{ block('sidenav') }}</div>
 
-        <div class="row">
-            <div class="col-md-12">
-                <p><a href="/admin/programmation"> Programmations</a></p>
+            <div class="col-lg-1"></div>
+            <div class="col-lg-4">
+                <h2>Consulter</h2>
+                <ul>
+                    <li><a href="{{ path('circuitlistadmin') }}"> Les circuits</a></li>
+                    <li><a href="{{ path('programmationlistadmin') }}">Les programmations</a></li>
+                </ul>
+
+            </div>
+            <div class="col-lg-1"></div>
+            <div class="col-lg-4">
+                <h2>Modifier</h2>
+                <ul>
+                    <li><a href={{ path('modifcircuit') }}> Les circuits</a></li>
+                    <li><a href={{ path('modifprogrammation') }}>Les programmations</a></li>
+                </ul>
             </div>
         </div>
     </div>

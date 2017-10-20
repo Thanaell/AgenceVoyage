@@ -15,35 +15,51 @@
 
 {% block header %}
 
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-5"></div>
+            <div class="col-lg-7">
     <h1>Agence de Voyage, partie administrateur</h1>
-    {% block nav %}
-
-        <nav class="navbar">
-            <div class="row">
-
-                <ul class="navbar-nav mr-auto">
-
-                    <li class="nav-item">
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Modifier des circuits</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="#">Modifier des programmations</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('accueil')}}">Déconnexion</a>
-                    </li>
-
-                </ul>
-
             </div>
+        </div>
 
-        </nav>
-    {% endblock %}
+    </div>
 {% endblock %}
 
-{% block footer %}
 
-<p>N'oubliez pas de vous déconnecter</p>
+{% block sidenav %}
+
+    <div class="col-lg-2">
+        <a href="{{ path('accueiladmin') }}">Accueil</a>
+        <a href="{{ path('accueil') }}">Déconnexion</a>
+        <a href="{{ path('circuitlistadmin') }}">Circuits</a>
+        <a href="{{ path('programmationlistadmin') }}">Programmations</a>
+    </div>
+
+
+{% endblock %}
+
+
+{% block main %}
+    <div class="container">
+        <div class="row">
+
+            <div>{{block('sidenav')}}</div>
+
+        </div>
+    </div>
+    {% endblock %}
+
+{% block footer %}
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-5"></div>
+            <div class="col-lg-7">
+                <h1>N'oubliez pas de vous déconnecter</h1>
+            </div>
+        </div>
+
+    </div>
 {% endblock %}

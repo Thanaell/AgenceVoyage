@@ -11,8 +11,14 @@
 
 
 {% block title %}Details for circuit {{ id }}{% endblock %}
-{% block body %}
+{% block main %}
 
+<div class="container">
+	<div class="row">
+		<div>{{ block('sidenav') }}</div>
+		<div class="col-lg-3"></div>
+
+		<div class="col-lg-7">
   <h1>{{ circuit.description }}</h1>
 
 	<h2>Détails</h2>
@@ -52,6 +58,10 @@
     {% else %}
     <p>Désolé : pas encore de programmations pour ce circuit.</p>
     {% endif %}
+	</div>
+</div>
+	</div>
+
 
 {% endblock %}
 
