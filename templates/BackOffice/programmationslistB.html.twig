@@ -2,7 +2,7 @@
 
 {% extends "BackOffice/baselayoutBack.html.twig" %}
 
-{% block title %}{{ parent() }} - programmations list{% endblock %}
+{% block title %}{{ parent() }} - Liste des programmations{% endblock %}
 
 {% block main %}
 
@@ -11,14 +11,14 @@
 <div class="container">
     <div class="row">
         <div>{{ block('sidenav') }}</div>
-        <div class="col-lg-3"></div>
+        <div class="col-lg-1"></div>
 
-        <div class="col-lg-7">
+        <div class="col-lg-8">
 
 
-    <h1>List of programmations</h1>
+    <h1>Liste des programmations</h1>
     {% if programmationslist is not empty %}
-        <p>Here are all your programmations:</p>
+        <p>Voici toutes les programmations de l'agence:</p>
         <ul>
             {# Loop through list and creeate the list of programmation items. #}
             {% for programmation in programmationslist %}
@@ -28,7 +28,7 @@
             {% endfor %}
         </ul>
     {% else %}
-        <p>Sorry, you don't have any programmations yet!</p>
+        <p>Désolé, vous n'avez pas encore de programmations</p>
     {% endif %}
 
         </div>

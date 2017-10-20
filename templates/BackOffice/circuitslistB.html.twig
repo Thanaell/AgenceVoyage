@@ -4,7 +4,7 @@
 
 {% extends "BackOffice/baselayoutBack.html.twig" %}
 
-{% block title %}{{ parent() }} - Circuits list{% endblock %}
+{% block title %}{{ parent() }} - Liste des circuits{% endblock %}
 
 {% block main %}
 
@@ -12,12 +12,12 @@
     <div class="container">
         <div class="row">
             <div>{{ block('sidenav') }}</div>
-            <div class="col-lg-3"></div>
-            <div class="col-lg-7">
+            <div class="col-lg-1"></div>
+            <div class="col-lg-8">
 
-                <h1>List of circuits</h1>
+                <h1>Liste des circuits</h1>
                 {% if circuitslist is not empty %}
-                    <p>Here are all your circuits:</p>
+                    <p>Voici tous les circuits de l'agence:</p>
                     <ul>
                         {# Loop through list and creeate the list of circuit items. #}
 
