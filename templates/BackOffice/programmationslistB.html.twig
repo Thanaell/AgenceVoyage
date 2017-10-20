@@ -16,9 +16,9 @@
         <div class="col-lg-8">
 
 
-    <h1>Liste des programmations</h1>
+    <h2>Liste des programmations</h2>
     {% if programmationslist is not empty %}
-        <p>Voici toutes les programmations de l'agence:</p>
+
         <ul>
             {# Loop through list and creeate the list of programmation items. #}
             {% for programmation in programmationslist %}
@@ -30,6 +30,8 @@
     {% else %}
         <p>Désolé, vous n'avez pas encore de programmations</p>
     {% endif %}
+
+            <a href="{{ path('modifprogrammation') }}"><i>Modifier ces programmations</i></a>
 
         </div>
     </div>
