@@ -27,6 +27,7 @@ class Circuit
     protected $programmations;
     private $etapes;
     private $nbEtapes;
+    private $urlImage;
     
     /**
      * Get id
@@ -251,6 +252,16 @@ class Circuit
     public function getEtapes()
     {
         return $this->etapes;
+    }
+
+
+    public function setsUrlImage($url)
+    {
+        $this->urlImage=$url;
+    }
+    public function getUrlImage()
+    {
+        return $this->urlImage;
     }
 
 }

@@ -5,14 +5,20 @@
 {% block title %}{{ parent() }} - Circuits list{% endblock %}
 
 {% block main %}
-    <h1>List of circuits</h1>
-    {% if plannedcircuitslist is not empty %}
-<div class="row">
-    <div class="col-md-12">
-        <p>Here are all your circuits:</p>
 
-    </div>
-</div>
+<div class="row">
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8">
+        <h1>Liste de nos circuits</h1>
+        <br>
+
+        {% if plannedcircuitslist is not empty %}
+        <p>Voici tous les circuits disponibles dans notre agence:</p>
+
+
+        <div class="row">
+        <div class="col-lg-1"></div>
+            <div class="col-lg-5">
 
         <ul>
         {# Loop through list and creeate the list of circuit items. #}
@@ -27,8 +33,15 @@
             	
         {% endfor %}
         </ul>
+
     {% else %}
         <p>Sorry, you don't have any circuits yet!</p>
     {% endif %}
+    </div>
+    </div>
+    </div>
+
+
+</div>
 
 {% endblock %} {# main #}

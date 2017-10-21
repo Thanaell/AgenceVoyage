@@ -15,6 +15,7 @@ $list_of_circuits = array();
 $circuitAndalousie = new Circuit();
 $circuitAndalousie->setDescription('Andalousie');
 $circuitAndalousie->setPaysDepart('Espagne');
+$circuitAndalousie->setUrlImage('https://cdn.vacancesbleues.resalys.com/sites/default/files/SH-ANDALOUSIE-1920px-VBV014401hd.jpg');
 $circuitAndalousie->addEtape('Grenade',1);
 $circuitAndalousie->addEtape('Cordoue',2);
 $circuitAndalousie->addEtape('Seville',1);
@@ -23,6 +24,7 @@ $list_of_circuits[] = $circuitAndalousie;
 $circuitVietnam = new Circuit();
 $circuitVietnam->setDescription('Vietnam');
 $circuitVietnam->setPaysDepart('Vietnam');
+$circuitVietnam->setUrlImage('http://kids.nationalgeographic.com/content/dam/kids/photos/Countries/Q-Z/vietnam-ha-long-bay.ngsversion.1412614607489.jpg');
 $circuitVietnam->addEtape('Hanoï', 1);
 $circuitVietnam->addEtape('Dà Nang', 1);
 $circuitVietnam->addEtape('Hôï An', 1);
@@ -32,6 +34,7 @@ $list_of_circuits[] = $circuitVietnam;
 $circuitIdF = new Circuit();
 $circuitIdF->setDescription('Ile de France');
 $circuitIdF->setPaysDepart('France');
+$circuitIdF->setUrlImage('http://bienvenue.chateauversailles.fr/uploads/sysresourcetranslation/fr/71fda25b999d43cd764aa2c3047f7fa37a483c87.jpg');
 $circuitIdF->addEtape('Versailles', 1);
 $circuitIdF->addEtape('Paris',1);
 $list_of_circuits[] = $circuitIdF;
@@ -39,6 +42,7 @@ $list_of_circuits[] = $circuitIdF;
 $circuitItalie = new Circuit();
 $circuitItalie->setDescription('Italie');
 $circuitItalie->setPaysDepart('Italie');
+$circuitItalie->setUrlImage('http://www.vivre-venise.com/wp-content/uploads/2016/11/Quartier-de-Santa-Croce-Venise.jpg');
 $circuitItalie->addEtape('Florence', 1);
 $circuitItalie->addEtape('Sienne', 1);
 $circuitItalie->addEtape('Pise', 1);
@@ -82,10 +86,12 @@ function get_all_circuits()
 
 
 
-//TODO: gérer les éléments distincts
+//REMARQUE: il eut été intéressant de me rendre compte avant de coder ça de l'existence de getProgrammations dans Circuit. Too late...
 /** Renvoie tous les circuits distincts programmés (une ou plusieurs fois)
  * @return array
  * */
+
+
 function get_all_distinct_planned_circuits()
 {
     global $list_of_circuits;
