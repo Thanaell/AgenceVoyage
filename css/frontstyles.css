@@ -5,11 +5,12 @@ html, body {
 
 p{
     color:black;
-    font-size: 1.25em;
+    font-size: 1.38em;
 }
 
 a{
     color:black;
+    font-size: 1.30em;
 }
 
 
@@ -24,8 +25,8 @@ a:hover{
 h1 {
     margin-top: 40px;
     margin-bottom: 20px;
-    font-weight: 400;
-    font-size:1.25em;
+    font-weight: 300;
+    font-size:2.3em;
 }
 
 h2 {
@@ -54,6 +55,7 @@ li {
     font-size: 1.25em;
     padding: 20px 0;
     border-top: 1px solid #eee;
+    list-style-type: square ;
 }
 
 footer{
@@ -76,16 +78,33 @@ footer{
     height:500px;
 }
 
-.titlenav{
-    font-size: 1.3em;
 
-}
 .textnav{
 
     color:white;
+    font-size: 1.2em;
+}
+
+.textnav:hover{
+    color:#ff6e06;
+
 }
 #navbarcontainer{
     background-color: #645139;
 
 }
+
+.row {
+    margin-top: 20px;
+}
+
+.panel-default{
+    border-radius: 20px;
+}
+
+.inpanel{
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
 
