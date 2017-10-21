@@ -61,3 +61,8 @@ footer{
   font-style: italic;
     font-size: 1.1em;
 }
+
+.carousel-inner {
+    width:100%;
+    height:500px;
+}
