@@ -27,7 +27,7 @@ require_once 'agvoymodel.php';
 // Routage et actions
 
 
-//Page accueil(html.twig à fair)
+//Page accueil front office
 
 $app->get('/', 
 		function () use ($app)
@@ -36,6 +36,24 @@ $app->get('/',
 }
 )->bind ('accueil');
 
+//formulaire de réservation
+$app->get('/reservation',
+    function () use ($app)
+    {
+        return $app ['twig']->render('FrontOffice/reservation.html.twig');
+    }
+)->bind ('reservation');
+
+//formulaire de contact
+$app->get('/contact',
+    function () use ($app)
+    {
+        return $app ['twig']->render('FrontOffice/contact.html.twig');
+    }
+)->bind ('contact');
+
+
+//Page accueil administrateur
 $app->get('/admin',
     function () use ($app)
     {
@@ -43,6 +61,8 @@ $app->get('/admin',
     }
 )->bind ('accueiladmin');
 
+
+//Formulaire de modifications des circuits
 $app->get('/admin/modifcircuit',
     function () use ($app)
     {
@@ -51,6 +71,7 @@ $app->get('/admin/modifcircuit',
 )->bind ('modifcircuit');
 
 
+//Formulaire de modifications des programmations
 $app->get('/admin/modifprogrammation',
     function () use ($app)
     {

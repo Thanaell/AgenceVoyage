@@ -8,8 +8,8 @@
      {# <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"> #}
      <link rel="stylesheet" href="{{ asset('vendor/twbs/bootstrap/dist/css/bootstrap-theme.min.css') }}">
      {# <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/darkly/bootstrap.min.css" rel="stylesheet"> #}
-     <link href="{{ asset('css/frontstyles.css') }}" rel="stylesheet">
      <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
+     <link href="{{ asset('css/frontstyles.css') }}" rel="stylesheet">
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
      {% block custompage_style %}<style></style>{% endblock %}
@@ -19,37 +19,39 @@
 {% block header %}
     <header>
 
-        <img id="img_header" src="https://t3.ftcdn.net/jpg/01/09/81/02/240_F_109810224_B2Jmt5FCLjcySrE7K1VwgOnIxPQ6XHQZ.jpg" alt="banner">
-        {% block nav %}
 
-            <nav class="navbar">
-                <div class="row">
 
-                    <ul class="navbar-nav mr-auto">
+         <nav class="navbar navbar-default">
+             <div class="container-fluid">
+                 <div class="row">
+                     <div class="col-lg-4"
+                 <div class="navbar-header">
+                     <a class="navbar-brand" href="#">WebSiteName</a>
+                 </div>
 
-                        <li class="nav-item">
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Contactez-nous</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled" href="{{ path('accueiladmin') }}">Accès administrateur</a>
-                        </li>
-                    </ul>
+                 <ul class="nav navbar-nav">
 
-                </div>
+                     <li><a href="{{ path('accueil') }}">Accueil</a></li>
+                     <li><a href="{{ path('circuitlist') }}">Nos circuits</a></li>
+                     <li><a href="{{ path('reservation') }}">Réservations</a></li>
+                     <li><a href="{{ path('contact') }}">Contactez-nous</a></li>
+                     <li id="AdminAccess"><a href="{{ path('accueiladmin')}}">Accès administrateur</a></li>
 
-            </nav>
-        {% endblock %}
+                 </ul>
+                 </div>
 
-                    </ul>
-                </div>
-            </div>
-        </div>
+             </div>
+         </nav>
+
     </header>
 {% endblock %}
 
 {% block footer %}
-<p>N'hésitez pas à nous contacter et à nous rejoindre sur les réseaux sociaux pour ne rater aucun de nos nouveaux voyages</p>
+    <footer>
+        <p>Rejoignez-nous pour ne rien rater de nos voyages</p>
+        <a href="https://www.facebook.com/Portal/"><img src="http://www.unpasdecote.asso.fr/stage/Facebook-Logo" alt="facebook_logo" style="width:50px"</a>
+        <a href="https://twitter.com/steam_games"><img src="https://upload.wikimedia.org/wikipedia/fr/thumb/c/c8/Twitter_Bird.svg/738px-Twitter_Bird.svg.png" alt="twitter_logo" style="width:50px"</a>
+    </footer>
 {% endblock %}
 
