@@ -36,6 +36,14 @@ h2 {
     color:black;
 }
 
+h3 {
+    margin-top: 5px;
+    margin-bottom: 20px;
+    font-weight: 500;
+    font-size:2.2em;
+    color:white;
+}
+
 ul {
     margin-top: 20px;
     padding-left: 0px;
@@ -59,10 +67,25 @@ footer{
 
 #AdminAccess{
   font-style: italic;
-    font-size: 1.1em;
+    font-size: 1.2em;
+    color:white;
 }
 
 .carousel-inner {
     width:100%;
     height:500px;
 }
+
+.titlenav{
+    font-size: 1.3em;
+
+}
+.textnav{
+
+    color:white;
+}
+#navbarcontainer{
+    background-color: #645139;
+
+}
+
