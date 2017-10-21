@@ -255,7 +255,7 @@ class Circuit
     }
 
 
-    public function setsUrlImage($url)
+    public function setUrlImage($url)
     {
         $this->urlImage=$url;
     }
