@@ -23,7 +23,7 @@
             {# Loop through list and creeate the list of programmation items. #}
             {% for programmation in programmationslist %}
                 <li>
-                    {{ programmation.id }} {{ programmation.circuit.description }} le {{ programmation.dateDepart|date('d-m-Y')  }}
+                    {{ programmation.id }}. {{ programmation.circuit.description }}, départ le {{ programmation.dateDepart|date('d-m-Y')  }}.
                 </li>
             {% endfor %}
         </ul>

@@ -42,7 +42,7 @@ h3 {
     margin-bottom: 20px;
     font-weight: 500;
     font-size:2.2em;
-    color:white;
+    color:black;
 }
 
 ul {
@@ -108,3 +108,6 @@ footer{
 }
 
 
+.carousel-caption-text{
+    color:white;
+}

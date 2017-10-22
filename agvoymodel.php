@@ -26,7 +26,7 @@ $circuitVietnam->setDescription('Vietnam');
 $circuitVietnam->setPaysDepart('Vietnam');
 $circuitVietnam->setUrlImage('http://kids.nationalgeographic.com/content/dam/kids/photos/Countries/Q-Z/vietnam-ha-long-bay.ngsversion.1412614607489.jpg');
 $circuitVietnam->addEtape('Hanoï', 1);
-$circuitVietnam->addEtape('Dà Nang', 1);
+$circuitVietnam->addEtape('Dà Nang', 2);
 $circuitVietnam->addEtape('Hôï An', 1);
 $circuitVietnam->addEtape('Hô Chi Minh',1);
 $list_of_circuits[] = $circuitVietnam;

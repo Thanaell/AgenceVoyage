@@ -40,6 +40,10 @@ li {
 
 }
 
+td, th{
+    padding:10px;
+}
+
 .form-complete {
     display: inline;
     margin-right: 20px;
