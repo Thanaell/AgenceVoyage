@@ -2,97 +2,439 @@
 // agvoymodel.php
 
 /**
- * Gestion du 'modèle de données' de l'application
+ * Gestion du 'modèle de données' de l'application via une base de données SQLite
+ *
+ * Note : ce code n'a pas une qualité industrielle, mais est principalement destiné à des tests
+ * de réalisation de l'application sur la gestion du CRUD dans les controleurs
+ *
+ * Cf. create-db-sqlite.sql pour le modèle physique des données dans la base
  */
 
-// Définition de données d'exemple
-
 use Model\Circuit;
+use Model\Etape;
 use Model\ProgrammationCircuit;
 
-$list_of_circuits = array();
-
-$circuitAndalousie = new Circuit();
-$circuitAndalousie->setDescription('Andalousie');
-$circuitAndalousie->setPaysDepart('Espagne');
-$circuitAndalousie->setUrlImage('https://cdn.vacancesbleues.resalys.com/sites/default/files/SH-ANDALOUSIE-1920px-VBV014401hd.jpg');
-$circuitAndalousie->addEtape('Grenade',1);
-$circuitAndalousie->addEtape('Cordoue',2);
-$circuitAndalousie->addEtape('Seville',1);
-$list_of_circuits[] = $circuitAndalousie;
-
-$circuitVietnam = new Circuit();
-$circuitVietnam->setDescription('Vietnam');
-$circuitVietnam->setPaysDepart('Vietnam');
-$circuitVietnam->setUrlImage('http://kids.nationalgeographic.com/content/dam/kids/photos/Countries/Q-Z/vietnam-ha-long-bay.ngsversion.1412614607489.jpg');
-$circuitVietnam->addEtape('Hanoï', 1);
-$circuitVietnam->addEtape('Dà Nang', 2);
-$circuitVietnam->addEtape('Hôï An', 1);
-$circuitVietnam->addEtape('Hô Chi Minh',1);
-$list_of_circuits[] = $circuitVietnam;
-
-$circuitIdF = new Circuit();
-$circuitIdF->setDescription('Ile de France');
-$circuitIdF->setPaysDepart('France');
-$circuitIdF->setUrlImage('http://bienvenue.chateauversailles.fr/uploads/sysresourcetranslation/fr/71fda25b999d43cd764aa2c3047f7fa37a483c87.jpg');
-$circuitIdF->addEtape('Versailles', 1);
-$circuitIdF->addEtape('Paris',1);
-$list_of_circuits[] = $circuitIdF;
-
-$circuitItalie = new Circuit();
-$circuitItalie->setDescription('Italie');
-$circuitItalie->setPaysDepart('Italie');
-$circuitItalie->setUrlImage('http://www.vivre-venise.com/wp-content/uploads/2016/11/Quartier-de-Santa-Croce-Venise.jpg');
-$circuitItalie->addEtape('Florence', 1);
-$circuitItalie->addEtape('Sienne', 1);
-$circuitItalie->addEtape('Pise', 1);
-$circuitItalie->addEtape('Rome', 2);
-$list_of_circuits[] = $circuitItalie;
-
-//print_r($list_of_circuits);
-
-// Circuits programmés
-
-$list_of_programmations = array();
-
-function add_programmation($date, $nb_personnes, $prix, $circuit)
-{
-    global $list_of_programmations;
-    $programmation = new ProgrammationCircuit($date, $nb_personnes, $prix, $circuit);
-    $circuit->addProgrammation($programmation);
-    $list_of_programmations[] = $programmation;
-}
-
-//add_programmation('2018-07-10', 10,  850, $circuitAndalousie);
-
-add_programmation('2017-08-16', 10, 1500, $circuitVietnam);
-add_programmation('2016-05-15', 12,  120, $circuitIdF);
-add_programmation('2017-10-13', 15,  800, $circuitItalie);
-add_programmation('2017-05-17', 10, 1500, $circuitVietnam);
-
-// Fonctions utilitaires
-
 /**
- * Renvoie tous les circuits
- * 
+ * Renvoie tous les Circuits
+ *
  * @return array
  */
 function get_all_circuits()
 {
-    global $list_of_circuits;
+    global $app;
+
+    $list_of_circuits = array();
+
+    $returned_circuits = $app['db']->fetchAll("SELECT * FROM circuit;");
+
+    foreach($returned_circuits as $c) {
+
+        $circuit = new Circuit($c['id']);
+
+        $circuit->setDescription($c['description']);
+        $circuit->setPaysDepart($c['pays_depart']);
+        $circuit->setVilleDepart($c['ville_depart']);
+        $circuit->setVilleArrivee($c['ville_arrivee']);
+        $circuit->setDureeCircuit($c['duree_circuit']);
+
+        array_push($list_of_circuits, $circuit);
+    }
 
     return $list_of_circuits;
 }
 
+/**
+ * Récupère un Circuit d'identifiant donné
+ *
+ * @param int $id
+ * @return NULL|Circuit
+ */
+function get_circuit_by_id($id)
+{
+    global $app;
+
+    $circuit = null;
+
+    $returned_circuits = $app['db']->fetchAll("SELECT * FROM circuit WHERE id = :id",
+        array('id' => $id));
+
+    // normally only one iteration
+    foreach($returned_circuits as $c)
+    {
+        $circuit = new Circuit($c['id']);
+
+        $circuit->setDescription($c['description']);
+        $circuit->setPaysDepart($c['pays_depart']);
+
+        $returned_etapes =  $app['db']->fetchAll(
+            "SELECT * FROM etape WHERE circuit_id = :id ORDER BY numero_etape",
+            array('id' => $id));
+
+        foreach($returned_etapes as $e)
+        {
+            $circuit->addEtape($e['ville_etape'], $e['nombre_jours'], $e['id']);
+        }
+
+        // computed atributes, but restore as they are in the DB
+        $circuit->setVilleDepart($c['ville_depart']);
+        $circuit->setVilleArrivee($c['ville_arrivee']);
+        $circuit->setDureeCircuit($c['duree_circuit']);
+
+        $returned_programmations =  $app['db']->fetchAll(
+            "SELECT * FROM programmation_circuit WHERE circuit_id = :id ORDER BY date_depart",
+            array('id' => $id));
+
+        foreach($returned_programmations as $p)
+        {
+            $programmation = new ProgrammationCircuit($p['date_depart'], $p['nombre_personnes'], $p['prix'], $circuit, $p['id']);
+
+            $circuit->addProgrammation($programmation);
+        }
+
+    }
+    return $circuit;
+}
+
+/**
+ * Ajoute un circuit dans la base
+ *
+ * @param string $description
+ * @param string $pays_depart
+ * @param string $ville_depart
+ * @param string $ville_arrivee
+ * @param int $duree_circuit
+ *
+ * @return NULL|Circuit
+ */
+function add_circuit($description, $pays_depart, $ville_depart, $ville_arrivee, $duree_circuit) {
+
+    global $app;
+
+    $executed = $app['db']->insert('circuit',
+        array(
+            "description" => $description,
+            "pays_depart" => $pays_depart,
+            "ville_depart" => $ville_depart,
+            "ville_arrivee" => $ville_arrivee,
+            "duree_circuit" => $duree_circuit
+        ));
+
+    $circuit = null;
+    if ($executed == 1) {
+
+        // Identifiers are generated by the DBMS
+        $id = $app['db']->lastInsertId();
+
+        $circuit = get_circuit_by_id($id);
+    }
+    return $circuit;
+}
+
+/**
+ * Save a Circuit to the DB
+ *
+ * @param Circuit $circuit
+ *
+ */
+function save_circuit($circuit) {
+
+    global $app;
+
+    $executed = $app['db']->update('circuit',
+        array(
+            "description" => $circuit->getDescription(),
+            "pays_depart" => $circuit->getPaysDepart(),
+            "ville_depart" => $circuit->getVilleDepart(),
+            "ville_arrivee" => $circuit->getVilleArrivee(),
+            "duree_circuit" => $circuit->getDureeCircuit()
+        ),
+        array("id" => $circuit->getId()) );
+
+    return $executed;
+}
+
+/**
+ * Destroy a circuit stored in the DB (and linked entities)
+ *
+ * @param int $id
+ */
+function remove_circuit_by_id($id)
+{
+    global $app;
+
+    // we should check proper completion, but that's quick & dirty example code, eh ;-)
+    $executed = $app['db']->delete('programmation_circuit',
+        array('circuit_id' => $id) );
+
+    $executed = $app['db']->delete('etape', array(
+        'circuit_id' => $id
+    ));
+
+    $executed = $app['db']->delete('circuit', array(
+        'id' => $id
+    ));
+}
+
+/**
+ * Load an Etape (in the context of its Circuit, also loaded)
+ *
+ * @param int $etape_id
+ * @return NULL|Etape
+ */
+function get_etape_by_id($etape_id)
+{
+    global $app;
+
+    $etape = null;
+
+    // Fetch the circuit of that etape
+    $returned_circuitids = $app['db']->fetchAll(
+        "SELECT circuit_id FROM etape WHERE id = :id",
+        array(
+            'id' => $etape_id
+        ));
+
+    // normally only one circuit_id found
+    foreach($returned_circuitids as $c)
+    {
+        $circuit = get_circuit_by_id($c['circuit_id']);
+
+        foreach($circuit->getEtapes() as $e)
+        {
+            if($e->getId() == $etape_id)
+            {
+                $etape = $e;
+                break;
+            }
+        }
+    }
+
+    return $etape;
+}
+
+/**
+ * Add an etape to the database
+ *
+ * Note that this variant doesn't generate an Etape object but only returns the etape's id in the DB
+ *
+ * @param Circuit $circuit
+ * @param int $numero_etape
+ * @param string $ville_etape
+ * @param int $nombre_jours
+ * @return NULL|int
+ */
+function add_etape($circuit, $numero_etape, $ville_etape, $nombre_jours) {
+
+    global $app;
+
+    $circuit_id = $circuit->getId();
+
+    $executed = $app['db']->insert('etape',
+        array(
+            'circuit_id' => $circuit_id,
+            'numero_etape' => $numero_etape,
+            'ville_etape' => $ville_etape,
+            'nombre_jours' => $nombre_jours
+        ));
+
+    $id = null;
+    if ($executed == 1)
+    {
+        $id = $app['db']->lastInsertId();
+    }
+    return $id;
+}
+
+/**
+ * Remove an etape from the DB
+ *
+ * @param int $id
+ */
+function remove_etape_by_id($id)
+{
+    global $app;
+
+    $executed = $app['db']->delete('etape', array(
+        'id' => $id
+    ));
+
+    return $executed;
+}
+
+/**
+ * Update the DB to save refreshed etapes (after renumbering for instance)
+ *
+ * @param Circuit $circuit
+ * @return Circuit
+ */
+function save_refreshed_etapes($circuit)
+{
+    global $app;
+
+    foreach($circuit->getEtapes() as $etape)
+    {
+        $executed = $app['db']->update('etape', array(
+            'numero_etape' => $etape->getNumeroEtape(),
+            'ville_etape' => $etape->getVilleEtape(),
+            'nombre_jours' => $etape->getNombreJours()
+        ), array(
+            'id' => $etape->getId(),
+            'circuit_id' => $circuit->getId()
+        ));
+    }
+    // save the Circuit as well to the DB (updated duration, etc.)
+    save_circuit($circuit);
+
+    return $circuit;
+}
 
 
-//REMARQUE: il eut été intéressant de me rendre compte avant de coder ça de l'existence de getProgrammations dans Circuit. Too late...
-/** Renvoie tous les circuits distincts programmés (une ou plusieurs fois)
+/**
+ * Renvoie tous les circuits programmés
+ *
  * @return array
- * */
+ */
+function get_all_programmations()
+{
+    global $app;
+
+    $list_of_programmations = array();
+
+    $returned_circuitids = $app['db']->fetchAll(
+        "SELECT DISTINCT(circuit_id) FROM programmation_circuit;" );
+
+    foreach($returned_circuitids as $c)
+    {
+        $circuit = get_circuit_by_id( $c['circuit_id'] );
+
+        foreach($circuit->getProgrammations() as $programmation)
+        {
+            array_push($list_of_programmations, $programmation);
+        }
+    }
+
+    return $list_of_programmations;
+}
+
+/**
+ * Récupère un circuit programmé (et son Circuit)
+ *
+ * @param int $id
+ * @return NULL|ProgrammationCircuit
+ */
+function get_programmation_by_id($id)
+{
+    global $app;
+
+    $programmation = null;
+
+    $returned_circuitids = $app['db']->fetchAll(
+        "SELECT circuit_id FROM programmation_circuit WHERE id = :id",
+        array(
+            'id' => $id
+        ));
+
+    // normally only one circuit_id
+    foreach($returned_circuitids as $c) {
+        $circuit = get_circuit_by_id($c['circuit_id']);
+
+        foreach($circuit->getProgrammations() as $p) {
+            if($p->getId() == $id) {
+                $programmation = $p;
+                break;
+            }
+        }
+        break;
+    }
+
+    return $programmation;
+}
+
+/**
+ * Add a programmation of a Circuit to the DB
+ *
+ * @param Circuit $circuit
+ * @param string $date_depart
+ * @param int $nombre_personnes
+ * @param int $prix
+ * @return NULL|ProgrammationCircuit
+ */
+function add_programmation($circuit, $date_depart, $nombre_personnes, $prix) {
+
+    global $app;
+
+    $circuit_id = $circuit->getId();
+
+    $executed = $app['db']->insert('programmation_circuit',
+        array(
+            'circuit_id' => $circuit_id,
+            'date_depart' => $date_depart,
+            'nombre_personnes' => $nombre_personnes,
+            'prix' => $prix
+        ));
+
+    $programmation = null;
+    if ($executed == 1) {
+
+        // Ids are generated by the RDBMS
+        $id = $app['db']->lastInsertId();
+
+        $programmation = get_programmation_by_id($id);
+    }
+    return $programmation;
+}
+
+/**
+ * Save a ProgrammationCircuit to the DB
+ *
+ * @param ProgrammationCircuit $programmation
+ */
+function save_programmation($programmation) {
+
+    global $app;
+
+    $executed = $app['db']->update('programmation_circuit',
+        array(
+            'date_depart' => $programmation->getDateDepart(),
+            'nombre_personnes' => $programmation->getNombrePersonnes(),
+            'prix' => $programmation->getPrix()),
+        array("id" => $programmation->getId()));
+
+    return $executed;
+}
+
+/**
+ * Remove a programmation from the DB
+ *
+ * @param int $id
+ */
+function remove_programmation_by_id($id)
+{
+    global $app;
+
+    $executed = $app['db']->delete('programmation_circuit', array(
+        'id' => $id
+    ));
+}
+
+function get_all_etapes_by_circuit_id($id)
+{
+
+    global $app;
+
+    $found = null;
+
+    $returned_etapes=$app['db']->fetchAll(
+        "SELECT * FROM etapes JOIN circuit ON etape.circuit_id=circuit.id WHERE id=:id",
+        array(
+            'id' => $id
+        ));
 
 
-function get_all_distinct_planned_circuits()
+    return $returned_etapes;
+}
+
+/*function get_all_distinct_planned_circuits()
 {
     global $list_of_circuits;
     global $list_of_programmations;
@@ -103,13 +445,13 @@ function get_all_distinct_planned_circuits()
 
             if ($programmation->getCircuit()->getId() == $circuit->getId()) {
 
-                    //on obtient dans found tous les circuits ayant une progrqmmation (avec des doublons éventuels)
-                    $found[] = $circuit;
-                }
-
-
+                //on obtient dans found tous les circuits ayant une progrqmmation (avec des doublons éventuels)
+                $found[] = $circuit;
             }
+
+
         }
+    }
     //suppression des doublons éventuels
     $found2=[];
     $thisisaboolean=false;
@@ -126,121 +468,11 @@ function get_all_distinct_planned_circuits()
             $thisisaboolean=false;
         }
         else{
-        $found2[]=$foundelement;}
+            $found2[]=$foundelement;}
 
 
     }
 
     return $found2;
 
-}
-		
-		
-		
-		
-
-/**
- * Récupère un circuit d'identifiant donné 
- * 
- * @param int $id
- * @return NULL|array
- */
-function get_circuit_by_id($id)
-{
-	global $list_of_circuits;
-	
-	$found = null;
-	
-	foreach ($list_of_circuits as $circuit) {
-		if ($circuit->getId() == $id) {
-			$found = $circuit;
-			break;
-		}
-	}
-	return $found;
-	
-}
-
-// /**
-//  * Rebranche les circuits programmés sur leurs circuits
-//  * 
-//  * @param &array $programmation
-//  */
-// function join_programmation_to_circuit(&$programmation) {
-//     $circuit = get_circuit_by_id($programmation['circuitId']);
-//     $programmation['circuit'] = $circuit;
-// }
-
-
-/**
- * Renvoie tous les circuits programmés
- * 
- * @return array
- */
-function get_all_programmations()
-{
-    global $list_of_programmations;
-
-    return $list_of_programmations;
-}
-
-/**
- * Récupère un circuit programmé d'identifiant de circuit programmé donné
- *
- * @param int $id
- * @return NULL|array
- */
-function get_programmation_by_id($id)
-{
-	global $list_of_programmations;
-	
-	$found = null;
-	
-	foreach ($list_of_programmations as $programmation) {
-		if ($programmation->getId() == $id) {
-			$found = $programmation;
-			break;
-		}
-	}
-	
-	return $found;
-}
-
-/**
- * Récupère les programmations d'un circuit d'identifiant de circuit donné
- *
- * @param int $id
- * @return NULL|array
- */
-function get_programmations_by_circuit_id($id)
-{
-	global $list_of_programmations;
-	
-	$found = array();
-	
-	foreach ($list_of_programmations as $programmation) {
-		if ($programmation->getCircuit()->getId() == $id) {
-			$found[] = $programmation;
-		}
-	}
-	return $found;
-}
-
-function get_all_etapes_by_circuit_id($id)
-{
-	
-	global $list_of_circuits;
-	
-	$found = null;
-	
-	foreach ($list_of_circuits as $circuit) {
-		if ($circuit->getId() == $id) {
-			$found = $circuit;
-			break;
-		}
-		
-	
-	}
-	return $found->getEtapes();
-}
-
+}*/
