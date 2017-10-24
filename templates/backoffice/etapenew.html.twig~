@@ -14,12 +14,10 @@
   <h1>Nouvelle étape</h1>
 
    Nouvelle étape pour le circuit {{ circuit.description }}
-   
-     {% include 'backoffice/etapeform.html.twig' %}
-
 
         </div>
     </div>
 </div>
+  {% include 'backoffice/etapeform.html.twig' %}
 
 {% endblock %} {# main #}

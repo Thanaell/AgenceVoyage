@@ -12,10 +12,9 @@
       <div class="col-lg-8">
 
   <h1>New circuit</h1>
+  </div>
+  </div>
+  </div>
   {% include 'backoffice/circuitform.html.twig' %}
-  </div>
-  </div>
-  </div>
-  
 
 {% endblock %} {# main #}
