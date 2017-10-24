@@ -19,8 +19,10 @@
 	<h1>{{ circuit.description }}</h1>
 		<br>
 
-		{#<img src="{{ circuit.urlImage }}" alt="image du circuit {{ id }}" style="width:700px;margin-left: auto; margin-right: auto">
-	#}
+		{% if circuit.urlImage is not empty %}
+		<img src="{{ circuit.urlImage }}" alt="image du circuit {{ id }}" style="width:700px;margin-left: auto; margin-right: auto">
+		{%endif%}
+	
 	<p>En partant de la ville de {{ circuit.villeDepart }}, nous vous proposons un voyage en {{ circuit.paysDepart }} pour une durée de {{ circuit.dureeCircuit }} jours, aboutissant à {{ circuit.villeArrivee }}. </p>
 
 		<div class="row">

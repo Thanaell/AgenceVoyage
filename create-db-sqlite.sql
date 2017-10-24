@@ -15,7 +15,7 @@ CREATE TABLE circuit (
    ville_depart VARCHAR(30) DEFAULT NULL,
    ville_arrivee VARCHAR(30) DEFAULT NULL,
    duree_circuit SMALLINT DEFAULT NULL,
-   urlImage TEXT DEFAULT NULL,
+   urlImage VARCHAR(2000) DEFAULT NULL,
 PRIMARY KEY(id));
 
 -- circuits d'exemple

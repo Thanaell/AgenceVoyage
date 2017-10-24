@@ -66,6 +66,7 @@ function get_circuit_by_id($id)
 		
 		$circuit->setDescription($c['description']);
 		$circuit->setPaysDepart($c['pays_depart']);
+		$circuit->setUrlImage($c['urlImage']);
 		
 		$returned_etapes =  $app['db']->fetchAll(
 		    "SELECT * FROM etape WHERE circuit_id = :id ORDER BY numero_etape",
@@ -107,7 +108,7 @@ function get_circuit_by_id($id)
  * 
  * @return NULL|Circuit
  */
-function add_circuit($description, $pays_depart, $ville_depart, $ville_arrivee, $duree_circuit) {
+function add_circuit($description, $pays_depart, $ville_depart, $ville_arrivee, $duree_circuit, $urlImage) {
 
 	global $app;
 	
@@ -117,7 +118,8 @@ function add_circuit($description, $pays_depart, $ville_depart, $ville_arrivee, 
 						"pays_depart" => $pays_depart,
 						"ville_depart" => $ville_depart,
 						"ville_arrivee" => $ville_arrivee,
-						"duree_circuit" => $duree_circuit
+						"duree_circuit" => $duree_circuit,
+						"urlImage"=>$urlImage
 				));
 	
 	$circuit = null;
@@ -147,7 +149,8 @@ function save_circuit($circuit) {
 	 			"pays_depart" => $circuit->getPaysDepart(),
 	 			"ville_depart" => $circuit->getVilleDepart(),
 	 			"ville_arrivee" => $circuit->getVilleArrivee(),
-	 			"duree_circuit" => $circuit->getDureeCircuit()
+	 			"duree_circuit" => $circuit->getDureeCircuit(),
+	 			"urlImage"=>$circuit->getUrlImage()
 		), 
 	    array("id" => $circuit->getId()) );
 	
