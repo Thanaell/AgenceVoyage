@@ -15,17 +15,18 @@ CREATE TABLE circuit (
    ville_depart VARCHAR(30) DEFAULT NULL,
    ville_arrivee VARCHAR(30) DEFAULT NULL,
    duree_circuit SMALLINT DEFAULT NULL,
+   urlImage TEXT DEFAULT NULL,
 PRIMARY KEY(id));
 
 -- circuits d'exemple
 INSERT INTO `circuit`(`id`,`description`, pays_depart, ville_depart, ville_arrivee, duree_circuit) 
-            VALUES (1,'Andalousie', 'Espagne', 'Grenade', 'Seville', 4);
+            VALUES (1,'Andalousie', 'Espagne', 'Grenade', 'Seville', 4, 'https://cdn.vacancesbleues.resalys.com/sites/default/files/SH-ANDALOUSIE-1920px-VBV014401hd.jpg');
 INSERT INTO `circuit`(`id`,`description`, pays_depart, ville_depart, ville_arrivee, duree_circuit) 
-            VALUES (2,'Vietnam', 'Vietnam', 'Hanoï', 'Hô Chi Minh', 4);
+            VALUES (2,'Vietnam', 'Vietnam', 'Hanoï', 'Hô Chi Minh', 4, 'http://kids.nationalgeographic.com/content/dam/kids/photos/Countries/Q-Z/vietnam-ha-long-bay.ngsversion.1412614607489.jpg');
+INSERT INTO `circuit`(`id`,`description`, pays_depart, ville_depart, ville_arrivee, duree_circuit)
+            VALUES (3,'Ile de France', 'France', 'Versailles', 'Paris', 2,  'http://bienvenue.chateauversailles.fr/uploads/sysresourcetranslation/fr/71fda25b999d43cd764aa2c3047f7fa37a483c87.jpg');
 INSERT INTO `circuit`(`id`,`description`, pays_depart, ville_depart, ville_arrivee, duree_circuit) 
-            VALUES (3,'Ile de France', 'France', 'Versailles', 'Paris', 2);
-INSERT INTO `circuit`(`id`,`description`, pays_depart, ville_depart, ville_arrivee, duree_circuit) 
-            VALUES (4,'Italie', 'Italie', 'Florence', 'Rome', 5);
+            VALUES (4,'Italie', 'Italie', 'Florence', 'Rome', 5,'http://www.vivre-venise.com/wp-content/uploads/2016/11/Quartier-de-Santa-Croce-Venise.jpg');
 
 -- etape
 --  Etapes des circuits

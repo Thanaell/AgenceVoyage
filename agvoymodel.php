@@ -3,10 +3,10 @@
 
 /**
  * Gestion du 'modèle de données' de l'application via une base de données SQLite
- *
+ * 
  * Note : ce code n'a pas une qualité industrielle, mais est principalement destiné à des tests
  * de réalisation de l'application sur la gestion du CRUD dans les controleurs
- *
+ * 
  * Cf. create-db-sqlite.sql pour le modèle physique des données dans la base
  */
 
@@ -16,7 +16,7 @@ use Model\ProgrammationCircuit;
 
 /**
  * Renvoie tous les Circuits
- *
+ * 
  * @return array
  */
 function get_all_circuits()
@@ -24,199 +24,200 @@ function get_all_circuits()
     global $app;
 
     $list_of_circuits = array();
-
+    
     $returned_circuits = $app['db']->fetchAll("SELECT * FROM circuit;");
-
+    
     foreach($returned_circuits as $c) {
-
-        $circuit = new Circuit($c['id']);
-
-        $circuit->setDescription($c['description']);
-        $circuit->setPaysDepart($c['pays_depart']);
-        $circuit->setVilleDepart($c['ville_depart']);
-        $circuit->setVilleArrivee($c['ville_arrivee']);
-        $circuit->setDureeCircuit($c['duree_circuit']);
-
-        array_push($list_of_circuits, $circuit);
+        
+    	$circuit = new Circuit($c['id']);
+    	
+    	$circuit->setDescription($c['description']);
+    	$circuit->setPaysDepart($c['pays_depart']);
+    	$circuit->setVilleDepart($c['ville_depart']);
+    	$circuit->setVilleArrivee($c['ville_arrivee']);
+    	$circuit->setDureeCircuit($c['duree_circuit']);
+    	$circuit->setUrlImage($c['urlImage']);
+    	
+    	array_push($list_of_circuits, $circuit);
     }
-
+     
     return $list_of_circuits;
 }
 
 /**
- * Récupère un Circuit d'identifiant donné
- *
+ * Récupère un Circuit d'identifiant donné 
+ * 
  * @param int $id
  * @return NULL|Circuit
  */
 function get_circuit_by_id($id)
 {
-    global $app;
+	global $app;
+	
+	$circuit = null;
+	
+	$returned_circuits = $app['db']->fetchAll("SELECT * FROM circuit WHERE id = :id",
+			array('id' => $id));
 
-    $circuit = null;
+	// normally only one iteration
+	foreach($returned_circuits as $c) 
+	{   
+		$circuit = new Circuit($c['id']);
+		
+		$circuit->setDescription($c['description']);
+		$circuit->setPaysDepart($c['pays_depart']);
+		
+		$returned_etapes =  $app['db']->fetchAll(
+		    "SELECT * FROM etape WHERE circuit_id = :id ORDER BY numero_etape",
+			array('id' => $id));
+		
+		foreach($returned_etapes as $e) 
+		{
+			$circuit->addEtape($e['ville_etape'], $e['nombre_jours'], $e['id']);
+		}
 
-    $returned_circuits = $app['db']->fetchAll("SELECT * FROM circuit WHERE id = :id",
-        array('id' => $id));
-
-    // normally only one iteration
-    foreach($returned_circuits as $c)
-    {
-        $circuit = new Circuit($c['id']);
-
-        $circuit->setDescription($c['description']);
-        $circuit->setPaysDepart($c['pays_depart']);
-
-        $returned_etapes =  $app['db']->fetchAll(
-            "SELECT * FROM etape WHERE circuit_id = :id ORDER BY numero_etape",
-            array('id' => $id));
-
-        foreach($returned_etapes as $e)
-        {
-            $circuit->addEtape($e['ville_etape'], $e['nombre_jours'], $e['id']);
-        }
-
-        // computed atributes, but restore as they are in the DB
-        $circuit->setVilleDepart($c['ville_depart']);
-        $circuit->setVilleArrivee($c['ville_arrivee']);
-        $circuit->setDureeCircuit($c['duree_circuit']);
-
-        $returned_programmations =  $app['db']->fetchAll(
-            "SELECT * FROM programmation_circuit WHERE circuit_id = :id ORDER BY date_depart",
-            array('id' => $id));
-
-        foreach($returned_programmations as $p)
-        {
-            $programmation = new ProgrammationCircuit($p['date_depart'], $p['nombre_personnes'], $p['prix'], $circuit, $p['id']);
-
-            $circuit->addProgrammation($programmation);
-        }
-
-    }
-    return $circuit;
+		// computed atributes, but restore as they are in the DB
+		$circuit->setVilleDepart($c['ville_depart']);
+		$circuit->setVilleArrivee($c['ville_arrivee']);
+		$circuit->setDureeCircuit($c['duree_circuit']);
+				
+		$returned_programmations =  $app['db']->fetchAll(
+		    "SELECT * FROM programmation_circuit WHERE circuit_id = :id ORDER BY date_depart",
+			array('id' => $id));
+		
+		foreach($returned_programmations as $p) 
+		{
+			$programmation = new ProgrammationCircuit($p['date_depart'], $p['nombre_personnes'], $p['prix'], $circuit, $p['id']);
+			
+			$circuit->addProgrammation($programmation);
+		}
+		
+	}
+	return $circuit;
 }
 
 /**
  * Ajoute un circuit dans la base
- *
+ * 
  * @param string $description
  * @param string $pays_depart
  * @param string $ville_depart
  * @param string $ville_arrivee
  * @param int $duree_circuit
- *
+ * 
  * @return NULL|Circuit
  */
 function add_circuit($description, $pays_depart, $ville_depart, $ville_arrivee, $duree_circuit) {
 
-    global $app;
-
-    $executed = $app['db']->insert('circuit',
-        array(
-            "description" => $description,
-            "pays_depart" => $pays_depart,
-            "ville_depart" => $ville_depart,
-            "ville_arrivee" => $ville_arrivee,
-            "duree_circuit" => $duree_circuit
-        ));
-
-    $circuit = null;
-    if ($executed == 1) {
-
-        // Identifiers are generated by the DBMS
-        $id = $app['db']->lastInsertId();
-
-        $circuit = get_circuit_by_id($id);
-    }
-    return $circuit;
+	global $app;
+	
+	$executed = $app['db']->insert('circuit',
+			array(
+						"description" => $description,
+						"pays_depart" => $pays_depart,
+						"ville_depart" => $ville_depart,
+						"ville_arrivee" => $ville_arrivee,
+						"duree_circuit" => $duree_circuit
+				));
+	
+	$circuit = null;
+	if ($executed == 1) {
+		
+	    // Identifiers are generated by the DBMS
+		$id = $app['db']->lastInsertId();
+		
+		$circuit = get_circuit_by_id($id);
+	}
+	return $circuit;
 }
 
 /**
  * Save a Circuit to the DB
- *
+ * 
  * @param Circuit $circuit
- *
+ * 
  */
 function save_circuit($circuit) {
-
-    global $app;
-
-    $executed = $app['db']->update('circuit',
-        array(
-            "description" => $circuit->getDescription(),
-            "pays_depart" => $circuit->getPaysDepart(),
-            "ville_depart" => $circuit->getVilleDepart(),
-            "ville_arrivee" => $circuit->getVilleArrivee(),
-            "duree_circuit" => $circuit->getDureeCircuit()
-        ),
-        array("id" => $circuit->getId()) );
-
-    return $executed;
+	
+	global $app;
+	
+	$executed = $app['db']->update('circuit', 
+	    array(
+	 			"description" => $circuit->getDescription(),
+	 			"pays_depart" => $circuit->getPaysDepart(),
+	 			"ville_depart" => $circuit->getVilleDepart(),
+	 			"ville_arrivee" => $circuit->getVilleArrivee(),
+	 			"duree_circuit" => $circuit->getDureeCircuit()
+		), 
+	    array("id" => $circuit->getId()) );
+	
+	return $executed;
 }
 
 /**
  * Destroy a circuit stored in the DB (and linked entities)
- *
+ * 
  * @param int $id
  */
 function remove_circuit_by_id($id)
 {
-    global $app;
+	global $app;
 
-    // we should check proper completion, but that's quick & dirty example code, eh ;-)
-    $executed = $app['db']->delete('programmation_circuit',
-        array('circuit_id' => $id) );
-
-    $executed = $app['db']->delete('etape', array(
-        'circuit_id' => $id
-    ));
-
-    $executed = $app['db']->delete('circuit', array(
-        'id' => $id
-    ));
+	// we should check proper completion, but that's quick & dirty example code, eh ;-)
+	$executed = $app['db']->delete('programmation_circuit', 
+	    array('circuit_id' => $id) );
+	
+	$executed = $app['db']->delete('etape', array(
+			'circuit_id' => $id
+	));
+	
+	$executed = $app['db']->delete('circuit', array(
+			'id' => $id
+	));
 }
 
 /**
  * Load an Etape (in the context of its Circuit, also loaded)
- *
+ * 
  * @param int $etape_id
  * @return NULL|Etape
  */
 function get_etape_by_id($etape_id)
 {
     global $app;
-
+    
     $etape = null;
-
+    
     // Fetch the circuit of that etape
     $returned_circuitids = $app['db']->fetchAll(
         "SELECT circuit_id FROM etape WHERE id = :id",
         array(
             'id' => $etape_id
         ));
-
+    
     // normally only one circuit_id found
-    foreach($returned_circuitids as $c)
+    foreach($returned_circuitids as $c) 
     {
         $circuit = get_circuit_by_id($c['circuit_id']);
-
-        foreach($circuit->getEtapes() as $e)
+        
+        foreach($circuit->getEtapes() as $e) 
         {
-            if($e->getId() == $etape_id)
+            if($e->getId() == $etape_id) 
             {
                 $etape = $e;
                 break;
             }
         }
     }
-
+    
     return $etape;
 }
 
 /**
  * Add an etape to the database
- *
+ * 
  * Note that this variant doesn't generate an Etape object but only returns the etape's id in the DB
- *
+ * 
  * @param Circuit $circuit
  * @param int $numero_etape
  * @param string $ville_etape
@@ -224,11 +225,11 @@ function get_etape_by_id($etape_id)
  * @return NULL|int
  */
 function add_etape($circuit, $numero_etape, $ville_etape, $nombre_jours) {
-
+    
     global $app;
-
+    
     $circuit_id = $circuit->getId();
-
+    
     $executed = $app['db']->insert('etape',
         array(
             'circuit_id' => $circuit_id,
@@ -236,42 +237,42 @@ function add_etape($circuit, $numero_etape, $ville_etape, $nombre_jours) {
             'ville_etape' => $ville_etape,
             'nombre_jours' => $nombre_jours
         ));
-
+    
     $id = null;
-    if ($executed == 1)
+    if ($executed == 1) 
     {
-        $id = $app['db']->lastInsertId();
+        $id = $app['db']->lastInsertId();    
     }
     return $id;
 }
 
 /**
  * Remove an etape from the DB
- *
+ * 
  * @param int $id
  */
 function remove_etape_by_id($id)
 {
     global $app;
-
+    
     $executed = $app['db']->delete('etape', array(
         'id' => $id
     ));
-
+    
     return $executed;
 }
 
 /**
  * Update the DB to save refreshed etapes (after renumbering for instance)
- *
+ * 
  * @param Circuit $circuit
  * @return Circuit
  */
-function save_refreshed_etapes($circuit)
+function save_refreshed_etapes($circuit) 
 {
     global $app;
-
-    foreach($circuit->getEtapes() as $etape)
+   
+    foreach($circuit->getEtapes() as $etape) 
     {
         $executed = $app['db']->update('etape', array(
             'numero_etape' => $etape->getNumeroEtape(),
@@ -280,11 +281,11 @@ function save_refreshed_etapes($circuit)
         ), array(
             'id' => $etape->getId(),
             'circuit_id' => $circuit->getId()
-        ));
+        ));  
     }
     // save the Circuit as well to the DB (updated duration, etc.)
     save_circuit($circuit);
-
+    
     return $circuit;
 }
 
@@ -296,24 +297,24 @@ function save_refreshed_etapes($circuit)
  */
 function get_all_programmations()
 {
-    global $app;
+	global $app;
+	
+	$list_of_programmations = array();
+	
+	$returned_circuitids = $app['db']->fetchAll(
+	    "SELECT DISTINCT(circuit_id) FROM programmation_circuit;" );
+	
+	foreach($returned_circuitids as $c) 
+	{
+		$circuit = get_circuit_by_id( $c['circuit_id'] );
+		
+		foreach($circuit->getProgrammations() as $programmation) 
+		{
+			array_push($list_of_programmations, $programmation);
+		}
+	}
 
-    $list_of_programmations = array();
-
-    $returned_circuitids = $app['db']->fetchAll(
-        "SELECT DISTINCT(circuit_id) FROM programmation_circuit;" );
-
-    foreach($returned_circuitids as $c)
-    {
-        $circuit = get_circuit_by_id( $c['circuit_id'] );
-
-        foreach($circuit->getProgrammations() as $programmation)
-        {
-            array_push($list_of_programmations, $programmation);
-        }
-    }
-
-    return $list_of_programmations;
+	return $list_of_programmations;
 }
 
 /**
@@ -324,155 +325,114 @@ function get_all_programmations()
  */
 function get_programmation_by_id($id)
 {
-    global $app;
+	global $app;
+	
+	$programmation = null;
+	
+	$returned_circuitids = $app['db']->fetchAll(
+	    "SELECT circuit_id FROM programmation_circuit WHERE id = :id", 
+		array(
+				'id' => $id
+		));
+	
+	// normally only one circuit_id
+	foreach($returned_circuitids as $c) {
+		$circuit = get_circuit_by_id($c['circuit_id']);
+		
+		foreach($circuit->getProgrammations() as $p) {
+			if($p->getId() == $id) {
+				$programmation = $p;
+				break;
+			}
+		}
+		break;
+	}
 
-    $programmation = null;
+	return $programmation;
+ }
 
-    $returned_circuitids = $app['db']->fetchAll(
-        "SELECT circuit_id FROM programmation_circuit WHERE id = :id",
-        array(
-            'id' => $id
-        ));
-
-    // normally only one circuit_id
-    foreach($returned_circuitids as $c) {
-        $circuit = get_circuit_by_id($c['circuit_id']);
-
-        foreach($circuit->getProgrammations() as $p) {
-            if($p->getId() == $id) {
-                $programmation = $p;
-                break;
-            }
-        }
-        break;
-    }
-
-    return $programmation;
-}
-
-/**
- * Add a programmation of a Circuit to the DB
- *
- * @param Circuit $circuit
- * @param string $date_depart
- * @param int $nombre_personnes
- * @param int $prix
- * @return NULL|ProgrammationCircuit
- */
-function add_programmation($circuit, $date_depart, $nombre_personnes, $prix) {
-
-    global $app;
-
-    $circuit_id = $circuit->getId();
-
-    $executed = $app['db']->insert('programmation_circuit',
-        array(
-            'circuit_id' => $circuit_id,
-            'date_depart' => $date_depart,
-            'nombre_personnes' => $nombre_personnes,
-            'prix' => $prix
-        ));
-
-    $programmation = null;
-    if ($executed == 1) {
-
-        // Ids are generated by the RDBMS
-        $id = $app['db']->lastInsertId();
-
-        $programmation = get_programmation_by_id($id);
-    }
-    return $programmation;
-}
-
-/**
- * Save a ProgrammationCircuit to the DB
- *
- * @param ProgrammationCircuit $programmation
- */
-function save_programmation($programmation) {
-
-    global $app;
-
-    $executed = $app['db']->update('programmation_circuit',
-        array(
+ /**
+  * Add a programmation of a Circuit to the DB 
+  * 
+  * @param Circuit $circuit
+  * @param string $date_depart
+  * @param int $nombre_personnes
+  * @param int $prix
+  * @return NULL|ProgrammationCircuit
+  */
+ function add_programmation($circuit, $date_depart, $nombre_personnes, $prix) {
+     
+     global $app;
+     
+     $circuit_id = $circuit->getId();
+     
+     $executed = $app['db']->insert('programmation_circuit',
+         array(
+             'circuit_id' => $circuit_id, 
+             'date_depart' => $date_depart, 
+             'nombre_personnes' => $nombre_personnes, 
+             'prix' => $prix
+         ));
+     
+     $programmation = null;
+     if ($executed == 1) {
+         
+         // Ids are generated by the RDBMS
+         $id = $app['db']->lastInsertId();
+         
+         $programmation = get_programmation_by_id($id);
+     }
+     return $programmation;
+ }
+ 
+ /**
+  * Save a ProgrammationCircuit to the DB
+  * 
+  * @param ProgrammationCircuit $programmation
+  */
+ function save_programmation($programmation) {
+     
+     global $app;
+     
+     $executed = $app['db']->update('programmation_circuit', 
+         array(
             'date_depart' => $programmation->getDateDepart(),
             'nombre_personnes' => $programmation->getNombrePersonnes(),
-            'prix' => $programmation->getPrix()),
-        array("id" => $programmation->getId()));
-
-    return $executed;
-}
-
-/**
- * Remove a programmation from the DB
- *
- * @param int $id
- */
-function remove_programmation_by_id($id)
-{
-    global $app;
-
-    $executed = $app['db']->delete('programmation_circuit', array(
-        'id' => $id
-    ));
-}
+            'prix' => $programmation->getPrix()), 
+         array("id" => $programmation->getId()));
+     
+     return $executed;
+ }
+ 
+ /**
+  * Remove a programmation from the DB
+  *  
+  * @param int $id
+  */
+ function remove_programmation_by_id($id)
+ {
+     global $app;
+     
+     $executed = $app['db']->delete('programmation_circuit', array(
+         'id' => $id
+     ));
+ }
 
 function get_all_etapes_by_circuit_id($id)
 {
 
-    global $app;
+    global $list_of_circuits;
 
     $found = null;
 
-    $returned_etapes=$app['db']->fetchAll(
-        "SELECT * FROM etapes JOIN circuit ON etape.circuit_id=circuit.id WHERE id=:id",
-        array(
-            'id' => $id
-        ));
-
-
-    return $returned_etapes;
-}
-
-/*function get_all_distinct_planned_circuits()
-{
-    global $list_of_circuits;
-    global $list_of_programmations;
-    $found = [];
-
     foreach ($list_of_circuits as $circuit) {
-        foreach ($list_of_programmations as $programmation) {
-
-            if ($programmation->getCircuit()->getId() == $circuit->getId()) {
-
-                //on obtient dans found tous les circuits ayant une progrqmmation (avec des doublons éventuels)
-                $found[] = $circuit;
-            }
-
-
+        if ($circuit->getId() == $id) {
+            $found = $circuit;
+            break;
         }
-    }
-    //suppression des doublons éventuels
-    $found2=[];
-    $thisisaboolean=false;
-    foreach ($found as $foundelement){
-        foreach ($found2 as $found2element){
-            if($found2element->getId()==$foundelement->getId()) {
-                //si le circuit qu'on considère est déjà dans found, on passe le booléen à true
-                $thisisaboolean=true;
-            }
-
-        }
-        //si le booléen est à true, on ne fait rien; si il est à false, on le rajoute dans la liste
-        if($thisisaboolean){
-            $thisisaboolean=false;
-        }
-        else{
-            $found2[]=$foundelement;}
 
 
     }
+    return $found->getEtapes();
 
-    return $found2;
-
-}*/
+}

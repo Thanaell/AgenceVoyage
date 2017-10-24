@@ -1,0 +1,21 @@
+{# templates/frontoffice/programmationshow.html.twig #}
+
+{% extends "frontoffice/baselayoutfront.html.twig" %}
+
+
+{% block title %}{{ parent() }} - Programmation de {{ programmation.circuit.description }}{% endblock %}
+
+{% block main %}
+<div class="row">
+	<div class="col-lg-1"></div>
+	<div class="col-lg-10">
+    <h1>Programmation de {{ programmation.circuit.description }}</h1>
+
+	<p>{{ programmation.circuit.description }} le {{ programmation.dateDepart|date('d-m-Y')  }}, 
+  	pour {{ programmation.nombrePersonnes }} personnes, à {{ programmation.prix }} euros.</p>
+    
+  	<p><a href="{{ path('circuitshow', { 'id' : programmation.circuit.id }) }}">Circuit details</a></p>
+
+	</div>
+</div>
+{% endblock %} {# main #}

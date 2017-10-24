@@ -1,0 +1,36 @@
+{# templates/frontoffice/programmationslist.html.twig #}
+
+
+{% extends "frontoffice/baselayoutfront.html.twig" %}
+{% block title %}{{ parent() }} - programmations list{% endblock %}
+
+{% block main %}
+
+    <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8">
+            <h1>Liste de nos programmations:</h1>
+            <br>
+
+    {% if programmationslist is not empty %}
+        <p>Here are all your programmations:</p>
+<div class="row">
+    <div class="col-lg-1"></div>
+    <div class="col-lg-6">
+        <ul>
+        {# Loop through list and creeate the list of programmation items. #}
+        {% for programmation in programmationslist %}
+            <li>
+          		<a href=" {{ path('programmationshow', { 'id' : programmation.id }) }}">{{ programmation.circuit.description }} le {{ programmation.dateDepart|date('d-m-Y')  }}</a>
+           </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Sorry, you don't have any programmations yet!</p>
+    {% endif %}
+    </div>
+    </div>
+    </div>
+    </div>
+
+    {% endblock %} {# main #}

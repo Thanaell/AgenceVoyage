@@ -1,0 +1,21 @@
+{# templates/backoffice/circuitmodify.html.twig #}
+
+{% extends "backoffice/baselayoutBack.html.twig" %}
+
+{% block title %}{{ parent() }} - Modify circuit{% endblock %}
+
+{% block main %}
+<div class="container">
+  <div class="row">
+    <div>{{ block('sidenav') }}</div>
+    <div class="col-lg-1"></div>
+    <div class="col-lg-8">
+  <h1>Modify circuit</h1>
+
+    </div>
+  </div>
+</div>
+
+  {% include 'backoffice/circuitform.html.twig' %}
+
+{% endblock %} {# main #}

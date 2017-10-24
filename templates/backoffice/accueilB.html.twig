@@ -1,6 +1,6 @@
 
 
-{% extends "BackOffice/baselayoutBack.html.twig" %}
+{% extends "backoffice/baselayoutBack.html.twig" %}
 
 {% block title %}
 Accueil administrateur
@@ -23,7 +23,7 @@ Accueil administrateur
             <div class="col-lg-4">
                 <h2 class="titre_accueil">Consulter</h2>
                 <ul>
-                    <li><a href="{{ path('circuitlistadmin') }}"> Les circuits</a></li>
+                    <li><a href="{{ path('admin_circuitlist') }}"> Les circuits</a></li>
                     <li><a href="{{ path('programmationlistadmin') }}">Les programmations</a></li>
                 </ul>
 

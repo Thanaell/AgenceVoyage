@@ -25,9 +25,9 @@ $app['twig'] = $app->extend('twig', function($twig, $app) {
             return $twig;
         });
 
-$app->register(new Silex\Provider\TranslationServiceProvider(), array(
+/*$app->register(new Silex\Provider\TranslationServiceProvider(), array(
             'translator.domains' => array(),
-));
+));*/
 
 // Gestion des "assets"
 $app->register( new Silex\Provider\AssetServiceProvider());
@@ -48,7 +48,7 @@ $app->register(new Silex\Provider\SessionServiceProvider(), array(
 ));
 
 // Formulaires
-$app->register(new Silex\Provider\FormServiceProvider());
+//$app->register(new Silex\Provider\FormServiceProvider());
 
 $app['locale']="fr_FR.UTF-8";
 

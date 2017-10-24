@@ -1,6 +1,6 @@
-{# templates/circuitslist.html.twig #}
+{# templates/frontoffice/circuitslist.html.twig #}
 
-{% extends "FrontOffice/baselayoutfront.html.twig" %}
+{% extends "frontoffice/baselayoutfront.html.twig" %}
 
 {% block title %}{{ parent() }} - Circuits list{% endblock %}
 
@@ -12,33 +12,25 @@
         <h1>Liste de nos circuits</h1>
         <br>
 
-        {% if plannedcircuitslist is not empty %}
-        <p>Voici tous les circuits disponibles dans notre agence:</p>
-
-
+    {% if circuitslist is not empty %}
+        <p>Here are all your circuits:</p>
         <div class="row">
-        <div class="col-lg-1"></div>
+            <div class="col-lg-1"></div>
             <div class="col-lg-5">
 
-        <ul>
+                <ul>
         {# Loop through list and creeate the list of circuit items. #}
-        
-       
-        {% for circuit in plannedcircuitslist %}
-        	
-              		
+        {% for circuit in circuitslist %}
             <li>
           		<a href="{{ path('circuitshow', { 'id' : circuit.id }) }}">{{ circuit.description }}</a>
             </li>
-            	
         {% endfor %}
         </ul>
-
     {% else %}
         <p>Sorry, you don't have any circuits yet!</p>
     {% endif %}
-    </div>
-    </div>
+            </div>
+        </div>
     </div>
 
 

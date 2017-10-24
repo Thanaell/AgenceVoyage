@@ -1,41 +1,41 @@
 {# templates/baselayout.html.twig #}
 <!DOCTYPE HTML>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>{% block title %}Application voyage{% endblock %}</title>
     <meta name="description" content="{% block description %}{% endblock %}">
-      {% block stylesheets %}
+    {% block stylesheets %}
 
-      {% endblock %} {# stylesheets #}
-  </head>
-  <body>
-    {% block body %}
-    {# Bootstrap container #}
-    <div style="min-height: 90%" class="container">
+    {% endblock %} {# stylesheets #}
+</head>
+<body>
+{% block body %}
+{# Bootstrap container #}
+<div style="min-height: 90%" class="container">
 
-        {% block header %}
-            <div class="row">
-                <div class="col-md-12">
-                    <p><i>HEADER</i></p>
-                </div>
+    {% block header %}
+        <div class="row">
+            <div class="col-md-12">
+                <p><i>HEADER</i></p>
             </div>
-        {% endblock %}
-        {% block main %}
-            <div class="row">
-                <div class="col-md-12">
-                    <p><i>MAIN</i></p>
-                </div>
+        </div>
+    {% endblock %}
+    {% block main %}
+        <div class="row">
+            <div class="col-md-12">
+                <p><i>MAIN</i></p>
             </div>
-        {% endblock %}
-        {% block footer %}
-            <footer id="a">
-                <p>FOOTER</p>
-            </footer>
-         {% endblock %}
+        </div>
+    {% endblock %}
+    {% block footer %}
+        <footer id="a">
+            <p>FOOTER</p>
+        </footer>
+    {% endblock %}
     {% endblock %} {# body #}
-  </body>
+</body>
 </html>
