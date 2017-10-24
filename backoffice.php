@@ -88,6 +88,7 @@ function circuitnewget_form($app)
     ->add('villeDepart')
     ->add('villeArrivee')
     ->add('dureeCircuit')
+    ->add('urlImage')
     ->getForm();
     return $form;
 }
@@ -168,6 +169,7 @@ $admin_circuitmodify_action = function (Request $request, $id) use ($app) {
     ->add('villeDepart')
     ->add('villeArrivee')
     ->add('dureeCircuit')
+    ->add('urlImage')
     ->getForm();
     
     $form->handleRequest($request);
