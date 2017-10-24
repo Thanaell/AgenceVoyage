@@ -77,12 +77,16 @@
 {% endblock %} {# circuit_programmations #}
 
 {# Now the main structure of the page #}
-{% block main %}
-    <h1>Circuit	{{ circuit.description }}</h1>
 
-	{# On the left, the data (10 columns), and on the right buttons (2 columns) #}    
+
+{% block main %}
+    
+<div class="container">
     <div class="row">
-    	<div class="col-md-10">
+        <div>{{ block('sidenav') }}</div>
+        <div class="col-lg-1"></div>
+        <div class="col-lg-6">
+			<h1>Circuit	{{ circuit.description }}</h1>
     
     		<h2>Détails</h2>
     
@@ -102,10 +106,10 @@
     		
     			{{ block('circuit_programmations') }}
     			
-    	</div>	<!-- /.col-md-10 -->
+    	</div>	
     	
     	{# Columns on the  right #}
-    	<div class="col-md-2">
+    	<div class="col-lg-2">
     		<h2>Actions :</h2>
     		<p>
     		<form action="{{ path('admin_circuitmodify', { 'id' : id }) }}"
@@ -121,7 +125,7 @@
     			<input type="hidden" id="_method" name="_method" value="DELETE" />
     		</form>
     		</p>
-    	</div>	<!-- /.col-md-2  -->
+    	</div>	<!-- /.col-lg-2  -->
     	
     </div> <!-- /.row  -->
     

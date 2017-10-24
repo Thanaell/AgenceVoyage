@@ -11,15 +11,15 @@
         <div class="col-lg-1"></div>
         <div class="col-lg-8">
 
-    <h1>List of programmations</h1>
+    <h1>Liste des programmations</h1>
 
     {% if programmationslist is not empty %}
-        <p>Here are all your programmations:</p>
+        <p>Voici toutes vos programmations :</p>
         <ul>
         {# Loop through list and creeate the list of programmation items. #}
         {% for programmation in programmationslist %}
             <li>
-          		<a href=" {{ path('programmationshow', { 'id' : programmation.id }) }}">{{ programmation.circuit.description }} le {{ programmation.dateDepart|date('d-m-Y')  }}</a>
+          		{{programmation.id }}. {{ programmation.circuit.description }} le {{ programmation.dateDepart|date('d-m-Y')  }}
            </li>
         {% endfor %}
         </ul>
